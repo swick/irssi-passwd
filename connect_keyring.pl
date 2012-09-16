@@ -4,6 +4,7 @@ use IPC::Open3;
 use Irssi;
 use Symbol;
 use Config::Irssi::Parser;
+use Data::Dumper;
 
 sub load_config {
   my $cfg_file = "$ENV{HOME}/.irssi/config";
@@ -22,17 +23,6 @@ sub load_config {
 
   close $handle;
   return $cfg;
-}
-
-sub find_server {
-  my ($servers, $chatnet) = @_;
-  foreach my $server (@{$servers}) {
-    if($server->{chatnet} eq $chatnet) {
-      return $server;
-    }
-  }
-  Irssi::print("Couldn't find ChatNet");
-  return;
 }
 
 sub find_password {
@@ -90,27 +80,24 @@ sub autoconnect {
   }
 }
 
-Irssi::command_bind connect_keyring => sub {
-  my ($chatnet) = @_;
-  my ($chatnet, $only_auto) = @_;
-  if(!$chatnet) {
-    Irssi::print("no chatnet given");
-    return;
-  }
+sub print_help {
+  print("KEYRING <keyring> <keyname> <command>
+    replaces the string '<password>' in <command> with the password from the keyring and executes the command");
+}
 
-  my $cfg = load_config() or return;
-  my $server = find_server($cfg->{servers}, $chatnet) or return;
-  if(!$server->{keyring}) {
-    Irssi::print("no keyring given");
-    return;
-  }
-  if(!$server->{keyname}) {
-    Irssi::print("no keyname given");
-    return;
-  }
-  my $password = find_password($server->{keyring}, $server->{keyname}) or return;
+Irssi::command_bind keyring => sub {
+  my ($args) = @_;
+  my @argv = split(/ /, $args);
+  my $argc = @argv;
 
-  Irssi::command(create_command($server, $password));
+  if($argc < 3) {
+    print_help();
+    return;
+  }
+  my $passwd = find_password($argv[0], $argv[1]) or return;
+  my $cmd = join(" ", @argv[2..$#argv]);
+  $cmd =~ s/\<password\>/$passwd/;
+  Irssi::command($cmd);
 };
 
 autoconnect();
