@@ -1,0 +1,68 @@
+--- a/src/perl/common/Server.xs	2012-09-18 00:45:03.000000000 +0200
++++ b/src/perl/common/Server.xs	2012-09-17 12:43:26.000000000 +0200
+@@ -102,3 +102,9 @@
+ CODE:
+ 	server->send_message(server, target, msg, target_type);
+ 
++int
++server_connection_set_key(server, key, value)
++	Irssi::Server server
++	char *key
++	char *value
++
+--- a/src/core/servers.c	2012-09-18 00:45:03.000000000 +0200
++++ b/src/core/servers.c	2012-09-17 13:05:28.000000000 +0200
+@@ -760,3 +760,53 @@
+ 	module_uniq_destroy("SERVER");
+ 	module_uniq_destroy("SERVER CONNECT");
+ }
++
++int server_connection_set_key(SERVER_REC *server, char *key, char *value)
++{
++	if (strcmp(key, "password") == 0) {
++		g_free_not_null(server->connrec->password);
++		server->connrec->password = g_strdup(value);
++	}
++	if (strcmp(key, "nick") == 0) {
++		g_free_not_null(server->connrec->nick);
++		server->connrec->nick = g_strdup(value);
++	}
++	else if (strcmp(key, "username") == 0) {
++		g_free_not_null(server->connrec->username);
++		server->connrec->username = g_strdup(value);
++	}
++	else if (strcmp(key, "realname") == 0) {
++		g_free_not_null(server->connrec->realname);
++		server->connrec->realname = g_strdup(value);
++	}
++	else if (strcmp(key, "ssl_cert") == 0) {
++		g_free_not_null(server->connrec->ssl_cert);
++		server->connrec->ssl_cert = g_strdup(value);
++	}
++	else if (strcmp(key, "ssl_pkey") == 0) {
++		g_free_not_null(server->connrec->ssl_pkey);
++		server->connrec->ssl_pkey = g_strdup(value);
++	}
++	else if (strcmp(key, "ssl_cafile") == 0) {
++		g_free_not_null(server->connrec->ssl_cafile);
++		server->connrec->ssl_cafile = g_strdup(value);
++	}
++	else if (strcmp(key, "ssl_capath") == 0) {
++		g_free_not_null(server->connrec->ssl_capath);
++		server->connrec->ssl_capath = g_strdup(value);
++	}
++	else if (strcmp(key, "use_ssl") == 0) {
++		server->connrec->use_ssl = (strcmp(value, "no") != 0);
++	}
++	else if (strcmp(key, "ssl_verify") == 0) {
++		server->connrec->ssl_verify = (strcmp(value, "no") != 0);
++	}
++	else if (strcmp(key, "resolve_prefer_ipv6") == 0) {
++		server->connrec->family = (strcmp(value, "no") != 0);
++	}
++	else {
++		return FALSE;
++	}
++	return TRUE;
++}
++
