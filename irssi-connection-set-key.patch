@@ -35,27 +35,27 @@
 +		g_free_not_null(server->connrec->realname);
 +		server->connrec->realname = g_strdup(value);
 +	}
-+	else if (strcmp(key, "ssl_cert") == 0) {
-+		g_free_not_null(server->connrec->ssl_cert);
-+		server->connrec->ssl_cert = g_strdup(value);
++	else if (strcmp(key, "tls_cert") == 0) {
++		g_free_not_null(server->connrec->tls_cert);
++		server->connrec->tls_cert = g_strdup(value);
 +	}
-+	else if (strcmp(key, "ssl_pkey") == 0) {
-+		g_free_not_null(server->connrec->ssl_pkey);
-+		server->connrec->ssl_pkey = g_strdup(value);
++	else if (strcmp(key, "tls_pkey") == 0) {
++		g_free_not_null(server->connrec->tls_pkey);
++		server->connrec->tls_pkey = g_strdup(value);
 +	}
-+	else if (strcmp(key, "ssl_cafile") == 0) {
-+		g_free_not_null(server->connrec->ssl_cafile);
-+		server->connrec->ssl_cafile = g_strdup(value);
++	else if (strcmp(key, "tls_cafile") == 0) {
++		g_free_not_null(server->connrec->tls_cafile);
++		server->connrec->tls_cafile = g_strdup(value);
 +	}
-+	else if (strcmp(key, "ssl_capath") == 0) {
-+		g_free_not_null(server->connrec->ssl_capath);
-+		server->connrec->ssl_capath = g_strdup(value);
++	else if (strcmp(key, "tls_capath") == 0) {
++		g_free_not_null(server->connrec->tls_capath);
++		server->connrec->tls_capath = g_strdup(value);
 +	}
-+	else if (strcmp(key, "use_ssl") == 0) {
-+		server->connrec->use_ssl = (strcmp(value, "no") != 0);
++	else if (strcmp(key, "use_tls") == 0) {
++		server->connrec->use_tls = (strcmp(value, "no") != 0);
 +	}
-+	else if (strcmp(key, "ssl_verify") == 0) {
-+		server->connrec->ssl_verify = (strcmp(value, "no") != 0);
++	else if (strcmp(key, "tls_verify") == 0) {
++		server->connrec->tls_verify = (strcmp(value, "no") != 0);
 +	}
 +	else if (strcmp(key, "resolve_prefer_ipv6") == 0) {
 +		server->connrec->family = (strcmp(value, "no") != 0);
