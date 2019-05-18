@@ -1,3 +1,7 @@
+# Discontinued!
+
+This repo is not being maintained anymore. Further development is happening here: https://github.com/gandalf3/irssi-passwd
+
 # irssi-passwd
 the script receives passwords from other scripts (like gnomekeyring.py) and uses them to connect to a server or in any command
 
