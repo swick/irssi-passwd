@@ -77,7 +77,7 @@ Irssi::signal_add_first('server connecting', sub {
 });
 
 Irssi::command_bind('passwd', sub {
-  my ($args) = @_;
+  my ($args, $server) = @_;
   my @argv = split(/ /, $args);
   my $argc = @argv;
   if($argc < 2) {
@@ -87,7 +87,7 @@ Irssi::command_bind('passwd', sub {
   my $cmd = join(' ', @argv[1..$argc-1]);
   my $pw = passwd_get_password(@argv[0]);
   $cmd =~ s/\<password\>/$pw/;
-  Irssi::command($cmd);
+  $server->command($cmd);
 });
 
 Irssi::command_bind('help', sub {
